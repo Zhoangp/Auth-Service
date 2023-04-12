@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: pb/auth-service.proto
+// source: pb/auth.proto
 
 package pb
 
@@ -40,7 +40,7 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 
 func (c *authServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/Register", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (c *authServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 
 func (c *authServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (c *authServiceClient) Login(ctx context.Context, in *LoginRequest, opts ..
 
 func (c *authServiceClient) Validate(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error) {
 	out := new(ValidateResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/Validate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/Validate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (c *authServiceClient) Validate(ctx context.Context, in *ValidateRequest, o
 
 func (c *authServiceClient) NewToken(ctx context.Context, in *NewTokenRequest, opts ...grpc.CallOption) (*NewTokenResponse, error) {
 	out := new(NewTokenResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/NewToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/NewToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *authServiceClient) NewToken(ctx context.Context, in *NewTokenRequest, o
 
 func (c *authServiceClient) VerifyAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error) {
 	out := new(VerifyAccountResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/VerifyAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/VerifyAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (c *authServiceClient) VerifyAccount(ctx context.Context, in *VerifyAccount
 
 func (c *authServiceClient) GetTokenVeriryAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error) {
 	out := new(VerifyAccountResponse)
-	err := c.cc.Invoke(ctx, "/auth-service.AuthService/GetTokenVeriryAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/GetTokenVeriryAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func _AuthService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/Register",
+		FullMethod: "/auth.AuthService/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).Register(ctx, req.(*RegisterRequest))
@@ -168,7 +168,7 @@ func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/Login",
+		FullMethod: "/auth.AuthService/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).Login(ctx, req.(*LoginRequest))
@@ -186,7 +186,7 @@ func _AuthService_Validate_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/Validate",
+		FullMethod: "/auth.AuthService/Validate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).Validate(ctx, req.(*ValidateRequest))
@@ -204,7 +204,7 @@ func _AuthService_NewToken_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/NewToken",
+		FullMethod: "/auth.AuthService/NewToken",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).NewToken(ctx, req.(*NewTokenRequest))
@@ -222,7 +222,7 @@ func _AuthService_VerifyAccount_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/VerifyAccount",
+		FullMethod: "/auth.AuthService/VerifyAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).VerifyAccount(ctx, req.(*VerifyAccountRequest))
@@ -240,7 +240,7 @@ func _AuthService_GetTokenVeriryAccount_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth-service.AuthService/GetTokenVeriryAccount",
+		FullMethod: "/auth.AuthService/GetTokenVeriryAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).GetTokenVeriryAccount(ctx, req.(*VerifyAccountRequest))
@@ -252,7 +252,7 @@ func _AuthService_GetTokenVeriryAccount_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "auth-service.AuthService",
+	ServiceName: "auth.AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -281,5 +281,5 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pb/auth-service.proto",
+	Metadata: "pb/auth.proto",
 }
