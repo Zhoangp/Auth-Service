@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"github.com/Zhoangp/Auth-Service/config"
 	"github.com/Zhoangp/Auth-Service/internal/model"
 	"github.com/Zhoangp/Auth-Service/internal/repo"
@@ -38,6 +39,7 @@ func (uc *userUseCase) Register(data *model.Users) error {
 		return err
 	}
 	if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName + data.LastName); err != nil {
+		fmt.Println(err)
 		return err
 	}
 
