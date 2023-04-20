@@ -3,31 +3,33 @@ package model
 import (
 	"github.com/Zhoangp/Auth-Service/pkg/common"
 	"github.com/Zhoangp/Auth-Service/pkg/utils"
+	"time"
 )
 
 type Users struct {
 	common.SQLModel
-	Email        string `json:"email" gorm:"column:email"`
-	Password     string `json:"password" gorm:"column:password"`
-	FirstName    string `json:"firstName" gorm:"column:firstName"`
-	LastName     string `json:"lastName" gorm:"column:lastName"`
-	Phone        string `json:"phoneNumber" gorm:"column:phoneNumber"`
-	Role         string `json:"role" gorm:"column:role"`
-	Address      string `json:"Address" gorm:"column:address"`
-	IsInstructor bool   `json:"is_instructor" gorm:"column:is_instructor"`
-	Verified bool `json:"verified" gorm:"column:verified"`
+	Email        string        `gorm:"column:email"`
+	Password     string        `gorm:"column:password"`
+	FirstName    string        `gorm:"column:firstName"`
+	LastName     string        `gorm:"column:lastName"`
+	Phone        string        `gorm:"column:phoneNumber"`
+	Role         string        `gorm:"column:role"`
+	Address      string        `gorm:"column:address"`
+	IsInstructor bool          `gorm:"column:is_instructor"`
+	Verified     bool          `gorm:"column:verified"`
+	Avatar       *common.Image `gorm:"column:picture"`
+	LastLogin    time.Time     `gorm:"column:lastLogin"`
 }
 type UserRegister struct {
-	Credential string `json:"credential"`
-	FirstName  string `json:"firstName" gorm:"column:firstName"`
-	LastName   string `json:"lastName" gorm:"column:lastName"`
-	Phone      string `json:"phoneNumber" gorm:"column:phoneNumber"`
-	Role       string `json:"role" gorm:"column:role"`
-	Address    string `json:"address"`
+	FirstName string `gorm:"column:firstName"`
+	LastName  string `gorm:"column:lastName"`
+	Phone     string `gorm:"column:phoneNumber"`
+	Role      string `gorm:"column:role"`
+	Address   string `gorm:"column:address"`
 }
 type UserLogin struct {
-	Email    string `json:"email" gorm:"column:email"`
-	Password string `json:"password" gorm:"column:password"`
+	Email    string `gorm:"column:email"`
+	Password string `gorm:"column:password"`
 }
 
 func (Users) TableName() string {

@@ -6,6 +6,7 @@ import (
 	"github.com/Zhoangp/Auth-Service/pb"
 	"github.com/Zhoangp/Auth-Service/pkg/common"
 	"github.com/Zhoangp/Auth-Service/pkg/utils"
+	"time"
 )
 
 type UserHandler struct {
@@ -14,7 +15,7 @@ type UserHandler struct {
 }
 type UserUseCase interface {
 	Register(data *model.Users) error
-	Login(data *model.UserLogin) (*utils.Token, *utils.Token, error)
+	Login(data *model.UserLogin) (*utils.Token, *utils.Token, *model.Users, error)
 	GetNewToken(refreshToken string) (*utils.Token, error)
 	GetUserNotVerified(email string) error
 	GetTokenVerify(email string) error
@@ -46,16 +47,30 @@ func (userHandler *UserHandler) Login(ctx context.Context, req *pb.LoginRequest)
 
 	data.Email = req.Email
 	data.Password = req.Password
-	token, refreshToken, err := userHandler.UC.Login(&data)
+	token, refreshToken, user, err := userHandler.UC.Login(&data)
 	if err != nil {
 		return &pb.LoginResponse{
 			Error: HandleError(err),
 		}, nil
 	}
 	return &pb.LoginResponse{
+		Information: &pb.User{
+			FirstName:   user.FirstName,
+			LastName:    user.LastName,
+			Email:       user.Email,
+			PhoneNumber: user.Password,
+			Address:     user.Password,
+			Avatar: &pb.Picture{
+				Url:    user.Avatar.Url,
+				Width:  user.Avatar.Width,
+				Height: user.Avatar.Height,
+			},
+			LastLogin: user.LastLogin.Format(time.Stamp),
+		},
 		AccessToken:  token.AccessToken,
 		RefreshToken: refreshToken.AccessToken,
 		ExpiresAt:    uint32(token.ExpiresAt),
+		TokenType:    "Bearer",
 	}, nil
 }
 

@@ -1,12 +1,12 @@
 package usecase
 
 import (
-	"fmt"
 	"github.com/Zhoangp/Auth-Service/config"
 	"github.com/Zhoangp/Auth-Service/internal/model"
 	"github.com/Zhoangp/Auth-Service/internal/repo"
 	"github.com/Zhoangp/Auth-Service/pkg/common"
 	"github.com/Zhoangp/Auth-Service/pkg/utils"
+	"time"
 )
 
 type UserRepository interface {
@@ -30,7 +30,13 @@ func (uc *userUseCase) Register(data *model.Users) error {
 	if err := data.PrepareCreate(); err != nil {
 		return err
 	}
-
+	data.Avatar = &common.Image{
+		Id:     1,
+		Url:    "https://courses-storages.s3.ap-northeast-1.amazonaws.com/default-img/images.png",
+		Width:  "250px",
+		Height: "250px",
+	}
+	data.LastLogin = time.Now()
 	if err := uc.userRepo.NewUsers(data); err != nil {
 		return err
 	}
@@ -38,40 +44,42 @@ func (uc *userUseCase) Register(data *model.Users) error {
 	if err != nil {
 		return err
 	}
-	if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName + data.LastName); err != nil {
-		fmt.Println(err)
+	if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName+data.LastName); err != nil {
 		return err
 	}
 
 	return nil
 }
-func (uc *userUseCase) Login(data *model.UserLogin) (*utils.Token, *utils.Token, error) {
+func (uc *userUseCase) Login(data *model.UserLogin) (*utils.Token, *utils.Token, *model.Users, error) {
 	user, err := uc.userRepo.FindDataWithCondition(map[string]any{"email": data.Email})
 	if err != nil {
-		return nil, nil, model.ErrEmailOrPasswordInvalid
+		return nil, nil, nil, model.ErrEmailOrPasswordInvalid
 	}
 	if !user.Verified {
-		return nil, nil, model.ErrAccountNotVerified
+		return nil, nil, nil, model.ErrAccountNotVerified
 	}
 
 	if err := utils.ComparePassword(user.Password, data.Password); err != nil {
-		return nil, nil, model.ErrEmailOrPasswordInvalid
+		return nil, nil, nil, model.ErrEmailOrPasswordInvalid
 	}
-
+	lastLogin := user.LastLogin
 	token, err := utils.GenerateToken(utils.TokenPayload{Email: user.Email, Role: user.Role, Password: user.Password}, uc.cf.Service.AccessTokenExpiredIn, uc.cf.Service.Secret)
 	if err != nil {
-		return nil, nil, common.ErrInternal(err)
+		return nil, nil, nil, common.ErrInternal(err)
 	}
 	refreshToken, err := utils.GenerateToken(utils.TokenPayload{Email: user.Email, Role: user.Role, Password: user.Password}, uc.cf.Service.RefreshTokenExpiredIn, uc.cf.Service.Secret)
 	if err != nil {
-		return nil, nil, common.ErrInternal(err)
+		return nil, nil, nil, common.ErrInternal(err)
 	}
-
-	return token, refreshToken, nil
+	if err := uc.userRepo.UpdateUser(user, map[string]any{"lastLogin": time.Now()}); err != nil {
+		return nil, nil, nil, common.ErrInternal(err)
+	}
+	user.LastLogin = lastLogin
+	return token, refreshToken, user, nil
 }
 func (uc *userUseCase) GetTokenVerify(email string) error {
 	user, err := uc.userRepo.FindDataWithCondition(map[string]any{"email": email})
-	if  err != nil {
+	if err != nil {
 		return model.ErrEmailOrPasswordInvalid
 	}
 	payload := utils.TokenPayload{Email: user.Email, Role: user.Role, Password: user.Password, Verified: user.Verified}
@@ -79,7 +87,7 @@ func (uc *userUseCase) GetTokenVerify(email string) error {
 	if err != nil {
 		return err
 	}
-	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.FirstName + user.LastName); err != nil {
+	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.FirstName+user.LastName); err != nil {
 		return err
 	}
 	return nil
