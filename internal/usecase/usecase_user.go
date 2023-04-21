@@ -87,7 +87,7 @@ func (uc *userUseCase) GetTokenVerify(email string) error {
 	if err != nil {
 		return err
 	}
-	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.FirstName+user.LastName); err != nil {
+	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.LastName); err != nil {
 		return err
 	}
 	return nil

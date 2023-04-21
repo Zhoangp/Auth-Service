@@ -58,8 +58,8 @@ func (userHandler *UserHandler) Login(ctx context.Context, req *pb.LoginRequest)
 			FirstName:   user.FirstName,
 			LastName:    user.LastName,
 			Email:       user.Email,
-			PhoneNumber: user.Password,
-			Address:     user.Password,
+			PhoneNumber: user.Phone,
+			Address:     user.Address,
 			Avatar: &pb.Picture{
 				Url:    user.Avatar.Url,
 				Width:  user.Avatar.Width,
