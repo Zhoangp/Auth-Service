@@ -44,7 +44,7 @@ func (uc *userUseCase) Register(data *model.Users) error {
 	if err != nil {
 		return err
 	}
-	if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName+data.LastName); err != nil {
+	if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName+data.LastName, "http://127.0.0.1:8080/courses/register/successverify?token="); err != nil {
 		return err
 	}
 
@@ -87,7 +87,7 @@ func (uc *userUseCase) GetTokenVerify(email string) error {
 	if err != nil {
 		return err
 	}
-	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.LastName); err != nil {
+	if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.LastName, "http://127.0.0.1:8080/courses/forgotpassword?token="); err != nil {
 		return err
 	}
 	return nil

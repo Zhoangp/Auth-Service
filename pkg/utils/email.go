@@ -10,11 +10,13 @@ import (
 	"os"
 	"path/filepath"
 )
+
 type EmailData struct {
 	URL       string
 	FirstName string
 	Subject   string
 }
+
 func ParseTemplateDir(dir string) (*template.Template, error) {
 	var paths []string
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
@@ -33,14 +35,14 @@ func ParseTemplateDir(dir string) (*template.Template, error) {
 
 	return template.ParseFiles(paths...)
 }
-func SendToken(cf *config.Config, destMail string, data ,name string) error {
+func SendToken(cf *config.Config, destMail string, data, name string, path string) error {
 	from := cf.Email.AppEmail
 	password := cf.Email.AppPassword
 
 	dataEmail := EmailData{
-		URL: "http://127.0.0.1:5500/index.html?token="+data,
+		URL:       path + data,
 		FirstName: name,
-		Subject: "Verify Account",
+		Subject:   "Verify Account",
 	}
 
 	var body bytes.Buffer
