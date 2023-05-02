@@ -27,7 +27,8 @@ type AuthServiceClient interface {
 	Validate(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
 	NewToken(ctx context.Context, in *NewTokenRequest, opts ...grpc.CallOption) (*NewTokenResponse, error)
 	VerifyAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error)
-	GetTokenVeriryAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error)
+	GetTokenVerifyAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error)
+	GetTokenResetPassword(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error)
 }
 
 type authServiceClient struct {
@@ -83,9 +84,18 @@ func (c *authServiceClient) VerifyAccount(ctx context.Context, in *VerifyAccount
 	return out, nil
 }
 
-func (c *authServiceClient) GetTokenVeriryAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error) {
+func (c *authServiceClient) GetTokenVerifyAccount(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error) {
 	out := new(VerifyAccountResponse)
-	err := c.cc.Invoke(ctx, "/auth.AuthService/GetTokenVeriryAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/GetTokenVerifyAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetTokenResetPassword(ctx context.Context, in *VerifyAccountRequest, opts ...grpc.CallOption) (*VerifyAccountResponse, error) {
+	out := new(VerifyAccountResponse)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/GetTokenResetPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +111,8 @@ type AuthServiceServer interface {
 	Validate(context.Context, *ValidateRequest) (*ValidateResponse, error)
 	NewToken(context.Context, *NewTokenRequest) (*NewTokenResponse, error)
 	VerifyAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error)
-	GetTokenVeriryAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error)
+	GetTokenVerifyAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error)
+	GetTokenResetPassword(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -124,8 +135,11 @@ func (UnimplementedAuthServiceServer) NewToken(context.Context, *NewTokenRequest
 func (UnimplementedAuthServiceServer) VerifyAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyAccount not implemented")
 }
-func (UnimplementedAuthServiceServer) GetTokenVeriryAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTokenVeriryAccount not implemented")
+func (UnimplementedAuthServiceServer) GetTokenVerifyAccount(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenVerifyAccount not implemented")
+}
+func (UnimplementedAuthServiceServer) GetTokenResetPassword(context.Context, *VerifyAccountRequest) (*VerifyAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenResetPassword not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -230,20 +244,38 @@ func _AuthService_VerifyAccount_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_GetTokenVeriryAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_GetTokenVerifyAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VerifyAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).GetTokenVeriryAccount(ctx, in)
+		return srv.(AuthServiceServer).GetTokenVerifyAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.AuthService/GetTokenVeriryAccount",
+		FullMethod: "/auth.AuthService/GetTokenVerifyAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetTokenVeriryAccount(ctx, req.(*VerifyAccountRequest))
+		return srv.(AuthServiceServer).GetTokenVerifyAccount(ctx, req.(*VerifyAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetTokenResetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetTokenResetPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/GetTokenResetPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetTokenResetPassword(ctx, req.(*VerifyAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -276,8 +308,12 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_VerifyAccount_Handler,
 		},
 		{
-			MethodName: "GetTokenVeriryAccount",
-			Handler:    _AuthService_GetTokenVeriryAccount_Handler,
+			MethodName: "GetTokenVerifyAccount",
+			Handler:    _AuthService_GetTokenVerifyAccount_Handler,
+		},
+		{
+			MethodName: "GetTokenResetPassword",
+			Handler:    _AuthService_GetTokenResetPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

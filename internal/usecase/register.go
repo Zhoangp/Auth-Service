@@ -34,18 +34,16 @@ func (uc *userUseCase) Register(data *model.Users) (*model.Users, string, error)
 
 	return data, token.AccessToken, nil
 }
-func (uc *userUseCase) GetTokenVerify(email string) (*model.Users, string, error) {
+func (uc *userUseCase) GetTokenVerify(email string, key string) (*model.Users, string, error) {
 	user, err := uc.userRepo.FindDataWithCondition(map[string]any{"email": email})
 	if err != nil {
 		return nil, "", model.ErrEmailOrPasswordInvalid
 	}
-	payload := utils.TokenPayload{Email: user.Email, Role: user.Role, Password: user.Password, Verified: user.Verified}
+	payload := utils.TokenPayload{Email: user.Email, Role: user.Role, Password: user.Password, Verified: user.Verified, Key: key}
 	token, err := utils.GenerateToken(payload, uc.cf.Service.ActiveTokenExpired, uc.cf.Service.Secret)
 	if err != nil {
 		return nil, "", err
 	}
-	//if err := utils.SendToken(uc.cf, user.Email, token.AccessToken, user.LastName, "http://127.0.0.1:8080/courses/forgotpassword?token="); err != nil {
-	//	return err
-	//}
+
 	return user, token.AccessToken, nil
 }

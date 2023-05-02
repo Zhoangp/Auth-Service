@@ -14,8 +14,8 @@ func (userHandler *UserHandler) VerifyAccount(ctx context.Context, req *pb.Verif
 	}
 	return &pb.VerifyAccountResponse{}, nil
 }
-func (userHandler *UserHandler) GetTokenVeriryAccount(ctx context.Context, req *pb.VerifyAccountRequest) (*pb.VerifyAccountResponse, error) {
-	user, token, err := userHandler.UC.GetTokenVerify(req.Email)
+func (userHandler *UserHandler) GetTokenVerifyAccount(ctx context.Context, req *pb.VerifyAccountRequest) (*pb.VerifyAccountResponse, error) {
+	user, token, err := userHandler.UC.GetTokenVerify(req.Email, "verify")
 	res, err := userHandler.mailClient.SendTokenVerifyAccount(ctx, &mail.SendTokenVerifyAccountRequest{
 		Mail: &mail.Mail{
 			DestMail: user.Email,

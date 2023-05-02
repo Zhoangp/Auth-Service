@@ -21,7 +21,7 @@ type UserUseCase interface {
 	Login(data *model.UserLogin) (*utils.Token, *utils.Token, *model.Users, error)
 	GetNewToken(refreshToken string) (*utils.Token, error)
 	GetUserNotVerified(email string) error
-	GetTokenVerify(email string) (*model.Users, string, error)
+	GetTokenVerify(email string, key string) (*model.Users, string, error)
 }
 
 func NewUserHandler(cf *config.Config, userUC UserUseCase, mailClient mail.MailServiceClient) *UserHandler {

@@ -20,6 +20,7 @@ type TokenPayload struct {
 	Role     string `json:"role"`
 	Password string `json:"password"`
 	Verified bool   `json:"verified"`
+	Key      string
 }
 
 type myClaims struct {

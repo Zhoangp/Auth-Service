@@ -9,7 +9,8 @@ service AuthService {
   rpc Validate(ValidateRequest)returns(ValidateResponse);
   rpc NewToken(NewTokenRequest)returns(NewTokenResponse);
   rpc VerifyAccount(VerifyAccountRequest)returns(VerifyAccountResponse);
-  rpc GetTokenVeriryAccount(VerifyAccountRequest)returns(VerifyAccountResponse);
+  rpc GetTokenVerifyAccount(VerifyAccountRequest)returns(VerifyAccountResponse);
+  rpc GetTokenResetPassword(VerifyAccountRequest)returns(VerifyAccountResponse);
 }
 message Picture {
   uint32 id = 1;
@@ -75,3 +76,4 @@ message VerifyAccountRequest {
 message VerifyAccountResponse {
   err.ErrorResponse error = 1;
 }
+
