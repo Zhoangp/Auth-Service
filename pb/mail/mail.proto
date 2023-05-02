@@ -1,0 +1,24 @@
+syntax = "proto3";
+package mail;
+option go_package = "github.com/Zhoangp/Auth-Service/pb/mail";
+import "pb/err/error.proto";
+service MailService {
+  rpc SendTokenVerifyAccount(SendTokenVerifyAccountRequest) returns(SendTokenVerifyAccountResponse);
+}
+message Mail {
+  string destMail = 1;
+  string subject = 2;
+}
+message SendTokenVerifyAccountRequest {
+  Mail mail = 1;
+  string token = 2;
+  string name = 3;
+  string url = 4;
+}
+message SendTokenVerifyAccountResponse {
+  err.ErrorResponse error = 1;
+}
+message ErrorResponse {
+  int64 code = 1;
+  string message = 2;
+}

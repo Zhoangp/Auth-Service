@@ -3,9 +3,11 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	Service ServiceConfig
-	Mysql   mysqlConfig
-	Email   EmailConfig
+	Service       ServiceConfig
+	Mysql         mysqlConfig
+	Email         EmailConfig
+	OtherServices otherServicesConfig
+	ClientSide    ClientSideConfig
 }
 type ServiceConfig struct {
 	Version               string
@@ -23,9 +25,15 @@ type mysqlConfig struct {
 	Password string
 	DBName   string
 }
+type ClientSideConfig struct {
+	URL string
+}
 type EmailConfig struct {
 	AppEmail    string
 	AppPassword string
+}
+type otherServicesConfig struct {
+	MailServiceURL string
 }
 
 func LoadConfig(fileName string) (*Config, error) {

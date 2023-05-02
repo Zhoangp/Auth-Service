@@ -15,10 +15,11 @@ type Token struct {
 }
 
 type TokenPayload struct {
+	Id       string
 	Email    string `json:"email"`
 	Role     string `json:"role"`
 	Password string `json:"password"`
-	Verified bool `json:"verified"`
+	Verified bool   `json:"verified"`
 }
 
 type myClaims struct {

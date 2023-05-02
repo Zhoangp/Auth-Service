@@ -1,8 +1,8 @@
 syntax = "proto3";
 package auth;
 
-option go_package="./pb";
-
+option go_package="github.com/Zhoangp/Auth-Service/pb";
+import "pb/err/error.proto";
 service AuthService {
   rpc Register(RegisterRequest)returns(RegisterResponse);
   rpc Login(LoginRequest)returns(LoginResponse);
@@ -18,13 +18,14 @@ message Picture {
   string height = 4;
 }
 message User {
-  string firstName = 1;
-  string lastName = 2;
-  string email = 3;
-  string phoneNumber = 4;
-  string address = 5;
-  Picture avatar = 6;
-  string lastLogin = 7;
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string phoneNumber = 5;
+  string address = 6;
+  Picture avatar = 7;
+  string lastLogin = 8;
 }
 message RegisterRequest {
   string firstName = 1;
@@ -36,7 +37,7 @@ message RegisterRequest {
   string role = 7;
 }
 message RegisterResponse {
-  ErrorResponse error = 1;
+  err.ErrorResponse error = 1;
 }
 message LoginRequest {
   string email = 1;
@@ -48,7 +49,7 @@ message LoginResponse {
   string refreshToken = 3;
   uint32 expiresAt = 4;
   string tokenType = 5;
-  ErrorResponse error = 6;
+  err.ErrorResponse error = 6;
 }
 
 message ValidateRequest {
@@ -56,24 +57,21 @@ message ValidateRequest {
 }
 message ValidateResponse {
   int64 userId = 1;
-  ErrorResponse error = 2;
+  err.ErrorResponse error = 2;
 }
-message ErrorResponse {
-  int64 code = 1;
-  string message = 2;
-}
+
 message NewTokenRequest {
   string refreshToken = 1;
 }
 message NewTokenResponse {
   string accessToken = 1;
   uint32 expiresAt = 2;
-  ErrorResponse error = 3;
+  err.ErrorResponse error = 3;
 }
 message VerifyAccountRequest {
   string email = 1;
   string password = 2;
 }
 message VerifyAccountResponse {
-  ErrorResponse error = 1;
+  err.ErrorResponse error = 1;
 }
