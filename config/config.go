@@ -8,6 +8,13 @@ type Config struct {
 	Email         EmailConfig
 	OtherServices otherServicesConfig
 	ClientSide    ClientSideConfig
+	RabbitMq      RabbitMq
+}
+type RabbitMq struct {
+	User     string
+	Password string
+	Port     string
+	Host     string
 }
 type ServiceConfig struct {
 	Version               string
@@ -34,6 +41,7 @@ type EmailConfig struct {
 }
 type otherServicesConfig struct {
 	MailServiceURL string
+	CartServiceUrl string
 }
 
 func LoadConfig(fileName string) (*Config, error) {

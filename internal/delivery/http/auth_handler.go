@@ -5,7 +5,6 @@ import (
 	"github.com/Zhoangp/Auth-Service/internal/model"
 	"github.com/Zhoangp/Auth-Service/pb"
 	"github.com/Zhoangp/Auth-Service/pb/err"
-	"github.com/Zhoangp/Auth-Service/pb/mail"
 	"github.com/Zhoangp/Auth-Service/pkg/common"
 	"github.com/Zhoangp/Auth-Service/pkg/utils"
 )
@@ -13,8 +12,7 @@ import (
 type UserHandler struct {
 	UC UserUseCase
 	pb.UnimplementedAuthServiceServer
-	mailClient mail.MailServiceClient
-	cf         *config.Config
+	cf *config.Config
 }
 type UserUseCase interface {
 	Register(data *model.Users) (*model.Users, string, error)
@@ -24,8 +22,8 @@ type UserUseCase interface {
 	GetTokenVerify(email string, key string) (*model.Users, string, error)
 }
 
-func NewUserHandler(cf *config.Config, userUC UserUseCase, mailClient mail.MailServiceClient) *UserHandler {
-	return &UserHandler{cf: cf, UC: userUC, mailClient: mailClient}
+func NewUserHandler(cf *config.Config, userUC UserUseCase) *UserHandler {
+	return &UserHandler{cf: cf, UC: userUC}
 }
 
 func HandleError(e error) *err.ErrorResponse {

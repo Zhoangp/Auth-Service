@@ -8,6 +8,7 @@ import (
 )
 
 func (userHandler *UserHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+
 	var data model.UserLogin
 	data.Email = req.Email
 	data.Password = req.Password

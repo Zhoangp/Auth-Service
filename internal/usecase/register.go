@@ -21,6 +21,7 @@ func (uc *userUseCase) Register(data *model.Users) (*model.Users, string, error)
 		Height: "250px",
 	}
 	data.LastLogin = time.Now()
+
 	if err := uc.userRepo.NewUsers(data); err != nil {
 		return nil, "", err
 	}
@@ -28,9 +29,7 @@ func (uc *userUseCase) Register(data *model.Users) (*model.Users, string, error)
 	if err != nil {
 		return nil, "", err
 	}
-	//if err := utils.SendToken(uc.cf, data.Email, token.AccessToken, data.FirstName+data.LastName, "http://127.0.0.1:8080/courses/register/successverify?token="); err != nil {
-	//	return nil, "", err
-	//}
+	data.FakeId = uc.h.Encode(data.Id)
 
 	return data, token.AccessToken, nil
 }

@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"fmt"
 	"github.com/Zhoangp/Auth-Service/internal/model"
 	"github.com/Zhoangp/Auth-Service/pkg/common"
 	"gorm.io/gorm"
@@ -16,7 +15,6 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 func (repo *UserRepository) NewUsers(data *model.Users) error {
 	db := repo.db.Begin()
-	fmt.Println(data)
 	if err := db.Table(model.Users{}.TableName()).Create(data).Error; err != nil {
 		db.Rollback()
 		return err

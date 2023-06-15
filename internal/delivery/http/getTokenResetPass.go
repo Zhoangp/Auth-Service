@@ -2,22 +2,27 @@ package userhttp
 
 import (
 	"context"
-	"fmt"
 	"github.com/Zhoangp/Auth-Service/pb"
 	"github.com/Zhoangp/Auth-Service/pb/mail"
+	"github.com/Zhoangp/Auth-Service/pkg/client"
 )
 
 func (userHandler *UserHandler) GetTokenResetPassword(ctx context.Context, req *pb.VerifyAccountRequest) (*pb.VerifyAccountResponse, error) {
 	user, token, err := userHandler.UC.GetTokenVerify(req.Email, "forget")
-	fmt.Println("abc")
-	res, err := userHandler.mailClient.SendTokenVerifyAccount(ctx, &mail.SendTokenVerifyAccountRequest{
+	mailService, err := client.InitServiceClient(userHandler.cf)
+	if err != nil {
+		return &pb.VerifyAccountResponse{
+			Error: HandleError(err),
+		}, nil
+	}
+	res, err := mailService.SendTokenVerifyAccount(ctx, &mail.SendTokenVerifyAccountRequest{
 		Mail: &mail.Mail{
 			DestMail: user.Email,
 			Subject:  "Reset Password",
 		},
 		Token: token,
 		Name:  user.FirstName + " " + user.LastName,
-		Url:   "http://" + userHandler.cf.ClientSide.URL + "/courses/recover?token=",
+		Url:   "http://" + userHandler.cf.ClientSide.URL + "user/changepassword?token=",
 	})
 
 	if err != nil {

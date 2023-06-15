@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/Zhoangp/Auth-Service/pb"
 	"github.com/Zhoangp/Auth-Service/pb/mail"
+	"github.com/Zhoangp/Auth-Service/pkg/client"
 )
 
 func (userHandler *UserHandler) VerifyAccount(ctx context.Context, req *pb.VerifyAccountRequest) (*pb.VerifyAccountResponse, error) {
@@ -16,7 +17,13 @@ func (userHandler *UserHandler) VerifyAccount(ctx context.Context, req *pb.Verif
 }
 func (userHandler *UserHandler) GetTokenVerifyAccount(ctx context.Context, req *pb.VerifyAccountRequest) (*pb.VerifyAccountResponse, error) {
 	user, token, err := userHandler.UC.GetTokenVerify(req.Email, "verify")
-	res, err := userHandler.mailClient.SendTokenVerifyAccount(ctx, &mail.SendTokenVerifyAccountRequest{
+	mailService, err := client.InitServiceClient(userHandler.cf)
+	if err != nil {
+		return &pb.VerifyAccountResponse{
+			Error: HandleError(err),
+		}, nil
+	}
+	res, err := mailService.SendTokenVerifyAccount(ctx, &mail.SendTokenVerifyAccountRequest{
 		Mail: &mail.Mail{
 			DestMail: user.Email,
 			Subject:  "Verify Account",
